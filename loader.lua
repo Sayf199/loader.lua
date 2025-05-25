@@ -1,12 +1,8 @@
-local remoteList = {}
-
-for _, v in ipairs(game:GetDescendants()) do
-    if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
-        table.insert(remoteList, v:GetFullName())
+local old
+old = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    if method == "FireServer" then
+        print("[ESPION] Remote détectée :", self:GetFullName(), "avec arguments :", ...)
     end
-end
-
-print("[📡] Liste des RemoteEvents et RemoteFunctions détectés :")
-for _, remote in ipairs(remoteList) do
-    print("→ " .. remote)
-end
+    return old(self, ...)
+end)
